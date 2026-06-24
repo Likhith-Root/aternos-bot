@@ -3,7 +3,7 @@ const mineflayer = require('mineflayer');
 const config = {
   host: 'mudhapappu.aternos.me',
   port: 25565,
-  username: 'AFKBot',
+  username: 'Mudha_Nigger',
   version: '1.21.11',
   auth: 'offline',
 };
@@ -15,22 +15,7 @@ function createBot() {
 
   bot.on('spawn', () => {
     console.log('Bot spawned, anti-AFK active');
-
-    setInterval(() => {
-      // Walk forward and back to simulate real movement
-      bot.setControlState('forward', true);
-      setTimeout(() => {
-        bot.setControlState('forward', false);
-        bot.setControlState('back', true);
-        setTimeout(() => {
-          bot.setControlState('back', false);
-          bot.setControlState('jump', true);
-          setTimeout(() => bot.setControlState('jump', false), 500);
-        }, 2000);
-      }, 2000);
-
-      bot.look(bot.entity.yaw + 1, 0, false);
-    }, 15000); // every 15 seconds
+    startMovementLoop(bot);
   });
 
   bot.on('chat', (username, message) => {
@@ -38,19 +23,52 @@ function createBot() {
   });
 
   bot.on('kicked', (reason) => {
-    console.log('Kicked:', reason);
-    setTimeout(createBot, 30000); // wait 30s before reconnecting
+    console.log('Kicked:', JSON.stringify(reason));
+    setTimeout(createBot, 60000);
   });
 
   bot.on('error', (err) => {
     console.log('Error:', err.message);
-    setTimeout(createBot, 30000);
+    setTimeout(createBot, 60000);
   });
 
   bot.on('end', () => {
-    console.log('Disconnected, reconnecting in 30s...');
-    setTimeout(createBot, 30000);
+    console.log('Disconnected, reconnecting in 60s...');
+    setTimeout(createBot, 60000);
   });
+}
+
+function startMovementLoop(bot) {
+  let step = 0;
+
+  setInterval(() => {
+    // Stop all movement first
+    bot.clearControlStates();
+
+    step = (step + 1) % 4;
+
+    switch (step) {
+      case 0:
+        bot.setControlState('forward', true);
+        bot.look(0, 0, false);
+        break;
+      case 1:
+        bot.setControlState('forward', true);
+        bot.look(Math.PI / 2, 0, false);
+        break;
+      case 2:
+        bot.setControlState('forward', true);
+        bot.look(Math.PI, 0, false);
+        break;
+      case 3:
+        bot.setControlState('forward', true);
+        bot.look((3 * Math.PI) / 2, 0, false);
+        // Jump occasionally
+        bot.setControlState('jump', true);
+        setTimeout(() => bot.setControlState('jump', false), 500);
+        break;
+    }
+  }, 5000); // change direction every 5 seconds
 }
 
 createBot();
