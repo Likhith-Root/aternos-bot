@@ -1,7 +1,7 @@
 const mineflayer = require('mineflayer');
 
 const config = {
-  host: 'mudhapappu.aternos.me',
+  host: 'gaineagers007.aternos.me',
   port: 25565,
   username: 'Mudha_Nigger',
   version: '1.21.11',
