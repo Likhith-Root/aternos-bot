@@ -3,7 +3,7 @@ const mineflayer = require('mineflayer');
 const config = {
   host: 'gaineagers007.aternos.me',
   port: 25565,
-  username: 'Mudha_Nigger',
+  username: 'Mudha_AFK_' + Math.floor(Math.random() * 1000),
   version: '1.21.11',
   auth: 'offline',
 };
